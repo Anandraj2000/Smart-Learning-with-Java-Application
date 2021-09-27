@@ -1,0 +1,743 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package file_data;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import main.Login_form;
+import main.File_upload;
+import static main.File_upload.noq;
+import static main.File_upload.answer_set;
+import static main.File_upload.question_set;
+
+/**
+ *
+ * @author Admin
+ */
+public class Quiz_Mode extends javax.swing.JFrame {
+    public static int count = 0;        //for question_set index
+    public static Dictionary user_answer = new Hashtable();
+    public static Dictionary user_min = new Hashtable();
+    public static Dictionary user_sec = new Hashtable();
+    public static int[] reminder = new int[File_upload.noq];
+    //public static int[] reminder = new int[File_upload.NOQ1];
+    public static int count1 = 0; 
+    public static int count_the_attempted = 0;
+    //for remainder index
+    public static int score = 0;
+    public int sec = 0;
+    public int min = 0;
+    public int hours = 0;
+    public static String total_time = "";
+    public static int sum =0;
+    public static double average=0;
+    public static int user_time=0;
+    public static int time_limit=0;
+    
+    
+
+    /**
+     * Creates new form Quiz_file
+     */
+    public Quiz_Mode() {
+        initComponents();
+        save.setEnabled(false);
+        clear.setEnabled(false);
+        remind_me_later.setEnabled(false);
+        jump_to_Question.setEnabled(false);
+        submit.setEnabled(false);
+        next.setEnabled(false);
+        
+    }
+    Timer time;
+    
+    public void store()
+    {
+        for (Enumeration k = answer_set.keys(); k.hasMoreElements();)
+        {
+            String temp_key = (String)k.nextElement();
+            //count the correct answer 
+            //int ua=Integer.parseInt((String)user_answer.get(temp_key));
+            //int ca=Integer.parseInt((String)answer_set.get(temp_key));
+            String ua=(String)user_answer.get(temp_key);
+            String ca=(String)answer_set.get(temp_key);
+            //if(user_answer.get(temp_key).equals((String)answer_set.get(temp_key)));
+            System.out.println("ua"+ua+"..");
+            System.out.println("ca"+ca.trim()+"..");
+            if(ua.equals(ca.trim()))
+            {
+                score = score + 1;
+                
+            }
+            System.out.println("Score"+score);
+        }
+        //get the date and time of submittion
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        //DateTimeFormatter dtf2 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now(); 
+        total_time = time_count0.getText()+" : "+time_count1.getText()+" : "+time_count.getText();
+        time.stop();
+        //insert score into database
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/project1","root","");
+            Statement st = conn.createStatement();
+            //st.executeUpdate("create table login_record (u_name varchar(20),password varchar(20),email varchar(20))");
+            //System.out.println("TAble is created");
+            //st.executeUpdate("insert into std values(name1,pass1,email)");
+            PreparedStatement ps=conn.prepareStatement("insert into quiz_record1(uid,file_path,date,score,time_taken,average_time_taken) values(?,?,?,?,?,?)");
+            ps.setInt(1,Login_form.id);
+            ps.setString(2,File_upload.file_path);
+            ps.setString(3,""+now);
+            ps.setInt(4,score);
+            ps.setString(5,total_time);
+            average = sum/count_the_attempted;
+            //System.out.println("Ave="+average+"\tsum="+sum);
+            //ps.setString(1,average_time);
+            ps.setDouble(6,average);
+            ps.executeUpdate();
+            
+
+
+            }catch(Exception e){
+                System.out.print(e);
+            }
+    }
+    
+    public static void repeat()
+    {
+        //print the question
+        field.setText(""+(count+1)+":"+File_upload.question_set.get(File_upload.key[count])+"\n"+(count+1)+":"+File_upload.hindi_set.get(File_upload.key[count]));
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        answer = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        clear = new javax.swing.JButton();
+        next = new javax.swing.JButton();
+        start = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        field = new javax.swing.JTextArea();
+        save = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        remind_me_later = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        question_no = new javax.swing.JTextField();
+        jump_to_Question = new javax.swing.JButton();
+        total_question = new javax.swing.JTextField();
+        question_attempted = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        remaining = new javax.swing.JTextArea();
+        submit = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        time_count = new javax.swing.JLabel();
+        time_count1 = new javax.swing.JLabel();
+        Exit_quiz_mode = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        user_hours = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        user_minute = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        time_count0 = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(1366, 768));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("SMART LEARNING TEST MODE");
+
+        answer.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        answer.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        answer.setToolTipText("");
+        answer.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        answer.setFocusCycleRoot(true);
+        answer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                answerActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel2.setText("TYPE ANSWER:");
+
+        clear.setBackground(new java.awt.Color(204, 0, 255));
+        clear.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        clear.setText("CLEAR");
+        clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearActionPerformed(evt);
+            }
+        });
+
+        next.setBackground(new java.awt.Color(255, 0, 0));
+        next.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        next.setText("NEXT");
+        next.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextActionPerformed(evt);
+            }
+        });
+
+        start.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        start.setText("START");
+        start.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                startActionPerformed(evt);
+            }
+        });
+
+        field.setEditable(false);
+        field.setColumns(20);
+        field.setRows(5);
+        jScrollPane1.setViewportView(field);
+
+        save.setBackground(new java.awt.Color(51, 255, 51));
+        save.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        save.setText("SAVE");
+        save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("TOATL NO OF QUESTION:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("NO OF QUESTION ATTEMPTED:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("REMIND ME LATER:");
+
+        remind_me_later.setBackground(new java.awt.Color(153, 153, 153));
+        remind_me_later.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        remind_me_later.setText("REMIND ME LATER");
+        remind_me_later.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                remind_me_laterActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel6.setText("JUMP TO QUESTION NO:");
+
+        question_no.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        question_no.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jump_to_Question.setBackground(new java.awt.Color(255, 204, 102));
+        jump_to_Question.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jump_to_Question.setText("JUMP");
+        jump_to_Question.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jump_to_QuestionActionPerformed(evt);
+            }
+        });
+
+        total_question.setEditable(false);
+        total_question.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        question_attempted.setEditable(false);
+        question_attempted.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+
+        remaining.setEditable(false);
+        remaining.setColumns(20);
+        remaining.setRows(5);
+        jScrollPane2.setViewportView(remaining);
+
+        submit.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        submit.setText("SUBMIT");
+        submit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submitActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel7.setText("Time:");
+
+        time_count.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        time_count.setForeground(new java.awt.Color(255, 0, 0));
+
+        time_count1.setForeground(new java.awt.Color(255, 0, 0));
+
+        Exit_quiz_mode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        Exit_quiz_mode.setText("EXIT_QUIZ_MODE");
+        Exit_quiz_mode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Exit_quiz_modeActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setText("SET TIME:");
+
+        user_hours.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        user_hours.setText("0");
+
+        user_minute.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        user_minute.setText("0");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel10.setText("hours");
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel11.setText("min");
+
+        time_count0.setForeground(new java.awt.Color(255, 0, 0));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 919, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(31, 31, 31)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(answer, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(remind_me_later, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(save, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                                                .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(37, 37, 37)
+                                                .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                                                    .addComponent(user_hours))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                                                    .addComponent(user_minute))
+                                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(total_question))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(question_attempted, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane2)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(152, 152, 152)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(question_no, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jump_to_Question, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Exit_quiz_mode, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(time_count0, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(time_count, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(time_count1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(719, 719, 719)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(97, 192, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)))
+                .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Exit_quiz_mode, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(question_no)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jump_to_Question, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                    .addComponent(time_count, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(time_count1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(time_count0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(total_question, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(question_attempted, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2)))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(save, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(clear, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(next, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(answer))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(remind_me_later, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(submit, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(start, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(user_hours, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(159, 159, 159)
+                        .addComponent(user_minute, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void answerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_answerActionPerformed
+
+    private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
+        // TODO add your handling code here:
+        if(answer.getText().isEmpty())      //check the answer field is not empty
+        {
+            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">PLEASE ENTER THE ANSWER<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(count<File_upload.key.length-1)   //check if it is less than last question_no or not  
+        {
+            System.out.print(File_upload.key.length);
+            
+            
+            
+            //display the next question
+            count=count+1;
+            repeat();
+            System.out.print(count);
+            answer.setText("");
+        }
+        
+        if(count==File_upload.key.length-1)      //check if it is last question or not
+        {
+            submit.setEnabled(true);
+            next.setEnabled(false);
+            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">YOU REACH LAST QUESTION<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
+        }
+       /* else{
+            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">YOU REACH LAST QUESTION<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
+            next.setEnabled(false);
+            submit.setEnabled(true);
+            
+        }*/
+    }//GEN-LAST:event_nextActionPerformed
+
+    private void clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearActionPerformed
+        // TODO add your handling code here:
+        answer.setText("");   //clear the answer      //
+    }//GEN-LAST:event_clearActionPerformed
+
+    private void startActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startActionPerformed
+        // TODO add your handling code here:
+        user_hours.setEnabled(false);
+        user_minute.setEnabled(false);
+        save.setEnabled(true);
+        clear.setEnabled(true);
+        remind_me_later.setEnabled(true);
+        jump_to_Question.setEnabled(true);
+        next.setEnabled(true);
+        Exit_quiz_mode.setEnabled(false);
+        /*for(int i=0;i<noq;i++)
+        {
+            field.setText(field.getText()+"\nA"+first_page.key[i]);
+
+        }*/
+        
+        remaining.setText("");
+        repeat();
+        System.out.println("hii");
+        total_question.setText(File_upload.noq+"");
+        //count = count + 1;
+        start.setEnabled(false);
+        submit.setEnabled(false);
+        
+        //initaialize user answer and time
+        for(int i=0;i<File_upload.noq;i++)
+        {
+            user_answer.put(File_upload.key[i],"");
+            user_min.put(File_upload.key[i],0);
+            user_sec.put(File_upload.key[i],0);
+        }
+        System.out.println("bye");
+        
+                //field.setText(first_page.name1);
+        
+        //timer program
+        setLocationRelativeTo(this);
+        time = new Timer(1000,new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                time_count1.setText(String.valueOf(sec));
+                time_count.setText(String.valueOf(min));
+                time_count0.setText(String.valueOf(hours));
+                if(sec==60)
+                {
+                    sec=0;
+                    min++;
+                    if(min==60)
+                    {
+                        hours++;
+                    }
+                    
+                    user_time =Integer.parseInt(user_hours.getText())*60+Integer.parseInt(user_minute.getText());
+                    if(user_time==0)
+                    {
+                        time_limit=noq;
+                    }
+                    else
+                    {
+                        time_limit=user_time;
+                    }
+                    if(min==time_limit)
+                    {
+                        time.stop();
+                        store();
+                        JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">TIME OUT<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE);
+                        if(Integer.parseInt(question_attempted.getText())<File_upload.noq)
+                        {
+                            
+                        }
+                        setVisible(false);
+                        new Performance_evaluation().setVisible(true);
+                        
+                    }
+                }
+                sec++;
+            }
+            
+        });
+           time.start();
+    }//GEN-LAST:event_startActionPerformed
+
+    private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
+        // TODO add your handling code here:
+        if(answer.getText().isEmpty())  //check if answer field is empty or not
+        {
+            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">PLEASE ENTER THE ANSWER<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
+        }
+        else if(count==0){
+            //store user answer and time
+            if("".equals(user_answer.get(File_upload.key[count])))
+                count_the_attempted++;
+            user_answer.put(File_upload.key[count],answer.getText());
+            user_min.put(File_upload.key[count],Integer.parseInt(time_count.getText()));
+            user_sec.put(File_upload.key[count],Integer.parseInt(time_count1.getText()));
+            question_attempted.setText(""+count_the_attempted);
+            sum = sum + (Integer.parseInt(time_count.getText())*60)+Integer.parseInt(time_count1.getText());
+            
+        }
+        else{
+            if("".equals(user_answer.get(File_upload.key[count])))
+                count_the_attempted++;
+            user_min.put(File_upload.key[count],(Integer.parseInt(time_count.getText())-Integer.parseInt(""+user_min.get(File_upload.key[count-1]))));
+            user_sec.put(File_upload.key[count],(Integer.parseInt(time_count1.getText())-Integer.parseInt(""+user_sec.get(File_upload.key[count-1]))));
+            user_answer.put(File_upload.key[count],answer.getText());
+            question_attempted.setText(""+count_the_attempted);
+            sum = sum + ((Integer.parseInt(time_count.getText())-Integer.parseInt(""+user_min.get(File_upload.key[count-1])))*60)+Integer.parseInt(""+user_sec.get(File_upload.key[count-1]));
+        }
+        //System.out.println("done");
+        System.out.println("Answer"+user_answer);
+        
+        
+    }//GEN-LAST:event_saveActionPerformed
+
+    private void remind_me_laterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remind_me_laterActionPerformed
+        // TODO add your handling code here:
+        //coount the remaining question
+        reminder[count1] = count;
+        count1 = count1 + 1;
+        remaining.setText(remaining.getText()+"\nQ."+(count+1));
+        count = count +1;
+        repeat();
+        
+    }//GEN-LAST:event_remind_me_laterActionPerformed
+
+    private void jump_to_QuestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jump_to_QuestionActionPerformed
+        // TODO add your handling code here:
+        count = Integer.parseInt(question_no.getText())-1;
+        repeat();
+        answer.setText("");
+        next.setEnabled(true);
+        if(count<File_upload.key.length)        //check question_no is last question or not
+        {
+            submit.setEnabled(false);
+        }
+        else
+        {
+            submit.setEnabled(true);
+        }
+    }//GEN-LAST:event_jump_to_QuestionActionPerformed
+
+    private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
+        // TODO add your handling code here:
+        store();
+        
+        setVisible(false);
+        //submit.setEnabled(false);
+        new Performance_evaluation().setVisible(true);
+    }//GEN-LAST:event_submitActionPerformed
+
+    private void Exit_quiz_modeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Exit_quiz_modeActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new Reading_Mode().setVisible(true);
+    }//GEN-LAST:event_Exit_quiz_modeActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        
+            
+    
+        
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Quiz_Mode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Quiz_Mode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Quiz_Mode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Quiz_Mode.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Quiz_Mode().setVisible(true);
+                /*for(int i=0;i<noq;i++)
+                {
+                    field.setText(field.getText()+"\nA"+first_page.key[i]);
+
+                }*/
+                //field.setText(first_page.name1);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Exit_quiz_mode;
+    private javax.swing.JTextField answer;
+    private javax.swing.JButton clear;
+    public static javax.swing.JTextArea field;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jump_to_Question;
+    private javax.swing.JButton next;
+    private javax.swing.JTextField question_attempted;
+    private javax.swing.JTextField question_no;
+    private javax.swing.JTextArea remaining;
+    private javax.swing.JButton remind_me_later;
+    private javax.swing.JButton save;
+    private javax.swing.JButton start;
+    private javax.swing.JButton submit;
+    private javax.swing.JLabel time_count;
+    private javax.swing.JLabel time_count0;
+    private javax.swing.JLabel time_count1;
+    private javax.swing.JTextField total_question;
+    private javax.swing.JTextField user_hours;
+    private javax.swing.JTextField user_minute;
+    // End of variables declaration//GEN-END:variables
+}
