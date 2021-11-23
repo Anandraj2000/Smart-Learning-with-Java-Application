@@ -37,7 +37,7 @@ public class Performance_evaluation extends javax.swing.JFrame {
         for (Enumeration k = answer_set.keys(); k.hasMoreElements();)
         {
             String temp_key1 = (String)k.nextElement();
-            result_content = result_content +"\n"+(c+1)+": "+ File_upload.question_set.get(temp_key1)+"\nCORRECT ANSWER: "+answer_set.get(temp_key1)+"\nYOUR ANSWER: "+user_answer.get(temp_key1)+"\nTIME= "+user_min.get(temp_key1)+" : "+user_sec.get(temp_key1);
+            result_content = "\n"+result_content +"\n"+(c+1)+": "+ File_upload.question_set.get(temp_key1)+"\nCORRECT ANSWER: "+answer_set.get(temp_key1)+"\nYOUR ANSWER: "+user_answer.get(temp_key1)+"\nTIME= "+user_min.get(temp_key1)+" : "+user_sec.get(temp_key1);
             c = c + 1;
         }
         analysis.setText(result_content);
@@ -179,7 +179,7 @@ public class Performance_evaluation extends javax.swing.JFrame {
                                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(total1)
                                     .addComponent(correct_answer)
@@ -187,7 +187,6 @@ public class Performance_evaluation extends javax.swing.JFrame {
                                     .addComponent(time_taken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(average_time, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(LOGOUT, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(exit)))

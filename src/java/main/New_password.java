@@ -177,7 +177,7 @@ public class New_password extends javax.swing.JFrame {
 
     private void chance_paswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chance_paswordActionPerformed
         // TODO add your handling code here:
-        System.out.println(email+"bbbbb"+Login_form.email);
+        //check if  password and conform password are same or not
         if(((String)new_password.getText()).equals((String)conform_password.getText()))
         {
             int i = JOptionPane.showConfirmDialog(null,"<html><h1><span style=\"font:-size:10px\"><B>Password changed Successful<br>NOW YOU ARE DIRECTING TO LOGIN PAGE YOU NEED TO RELOGIN WITH NEW PASSWORD <span></h1><html>","AUTHETICATION",JOptionPane.OK_OPTION);
@@ -188,33 +188,16 @@ public class New_password extends javax.swing.JFrame {
                     Class.forName("com.mysql.cj.jdbc.Driver");
                     Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/project1","root","");
                     Statement st = conn.createStatement();
-                    /*ResultSet rs=st.executeQuery("select * from login_record where email='"+Login_form.email+"'");
-                    while(rs.next())
-                    {
-                        if(email.equals(rs.getString(3)))
-                        {
-                                    st.executeUpdate("update login_record set password ='"+new_password.getText()+"' where email='"+email.getText()+"'");
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">TYPE CORRECT EMAIL ADDRESS<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
-                        }
-                    }*/
                     if((email.getText()).equals(Login_form.email))
-                        {
-                                    st.executeUpdate("update login_record1 set password ='"+new_password.getText()+"' where email='"+email.getText()+"'");
-                        }
-                        else
-                        {
-                            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">TYPE CORRECT EMAIL ADDRESS<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
-                        }
+                    {
+                        st.executeUpdate("update login_record1 set password ='"+new_password.getText()+"' where email='"+email.getText()+"'");
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">TYPE CORRECT EMAIL ADDRESS<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
+                    }
                     
-                    //System.out.println("TAble is created");
-                    //st.executeUpdate("insert into std values(name1,pass1,email)");
-            
-                    //insert user record into database
-                    
-                } catch (ClassNotFoundException ex) {
+                }catch (ClassNotFoundException ex) {
                     Logger.getLogger(New_password.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex) {
                     Logger.getLogger(New_password.class.getName()).log(Level.SEVERE, null, ex);
@@ -225,9 +208,7 @@ public class New_password extends javax.swing.JFrame {
         }
         else
         {
-            //check if  password and conform password are same or not
             JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">Password and conform password must be match<span></h1><html>","ALERT",JOptionPane.ERROR_MESSAGE);
-
         }
     }//GEN-LAST:event_chance_paswordActionPerformed
 

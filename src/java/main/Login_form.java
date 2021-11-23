@@ -59,7 +59,6 @@ public class Login_form extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 51, 255));
-        setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(1366, 768));
 
         jLabel1.setBackground(new java.awt.Color(102, 0, 102));

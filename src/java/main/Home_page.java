@@ -57,17 +57,16 @@ public class Home_page extends javax.swing.JFrame {
         new_question_set = new javax.swing.JButton();
         logout = new javax.swing.JButton();
         delete_account = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        feedback = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         record = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setFocusTraversalPolicyProvider(true);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1366, 768));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel1.setText("SMART LEARNING WITH JAVA");
+        jLabel1.setText("WELCOME TO THE SMART LEARNING WORLD");
 
         change_password.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         change_password.setText("CHANGE PASSWORD");
@@ -109,10 +108,11 @@ public class Home_page extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        feedback.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        feedback.setText("FEEDBACK");
+        feedback.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                feedbackActionPerformed(evt);
             }
         });
 
@@ -135,23 +135,24 @@ public class Home_page extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(109, 109, 109)
+                        .addComponent(feedback)
+                        .addGap(94, 94, 94)
                         .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addComponent(change_password, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(68, 68, 68)
-                        .addComponent(Quiz_records, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                        .addComponent(new_question_set)
-                        .addGap(107, 107, 107)
-                        .addComponent(delete_account, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Quiz_records, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE)
+                                .addComponent(new_question_set)
+                                .addGap(107, 107, 107)
+                                .addComponent(delete_account, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(82, 82, 82))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(455, 455, 455)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
@@ -160,7 +161,7 @@ public class Home_page extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(feedback, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(34, 34, 34)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(83, 83, 83)
@@ -172,7 +173,7 @@ public class Home_page extends javax.swing.JFrame {
                     .addComponent(delete_account, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(44, 44, 44)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(521, Short.MAX_VALUE))
+                .addContainerGap(268, Short.MAX_VALUE))
         );
 
         pack();
@@ -229,10 +230,10 @@ public class Home_page extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_delete_accountActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_feedbackActionPerformed
         // TODO add your handling code here:
           new feedback().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_feedbackActionPerformed
 
     /**
      * @param args the command line arguments
@@ -274,7 +275,7 @@ public class Home_page extends javax.swing.JFrame {
     private javax.swing.JButton Quiz_records;
     private javax.swing.JButton change_password;
     private javax.swing.JButton delete_account;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton feedback;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton logout;

@@ -140,19 +140,11 @@ public class Sign_Up_Form extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/project1","root","");
             Statement st = conn.createStatement();
-            //st.executeUpdate("create table login_record (u_name varchar(20),password varchar(20),email varchar(20))");
-            //System.out.println("TAble is created");
-            //st.executeUpdate("insert into std values(name1,pass1,email)");
-            
-            //insert user record into database
             PreparedStatement ps=conn.prepareStatement("insert into login_record1 (u_name,password,email)values(?,?,?)");
             ps.setString(1,name1);
             ps.setString(2,pass1);
             ps.setString(3,email1);
             ps.executeUpdate();
-            
-
-
             }catch(Exception e){
                 System.out.print(e);
             }

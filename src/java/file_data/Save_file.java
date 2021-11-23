@@ -5,6 +5,7 @@
  */
 package file_data;
 
+import static file_data.Performance_evaluation.result_content;
 import static file_data.Reading_Mode.forwhome;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -118,7 +119,7 @@ public class Save_file extends javax.swing.JFrame {
         FileWriter out = null;
         try {
             //pass the file path where to save the file
-            out = new FileWriter("D:\\ANAND\\TYCS\\project\\"+file_name1.getText());
+            out = new FileWriter("D:\\ANAND\\TYCS\\project\\"+file_name1.getText()+formate.getSelectedItem());
         } catch (IOException ex)
         {
             Logger.getLogger(Save_file.class.getName()).log(Level.SEVERE, null, ex);
@@ -131,7 +132,7 @@ public class Save_file extends javax.swing.JFrame {
             }
             else if(forwhome=="Quiz")
             {
-                out.write(Reading_Mode.data);
+                out.write(result_content);
             }
             
         } catch (IOException ex) 

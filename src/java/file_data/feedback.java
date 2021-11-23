@@ -54,7 +54,7 @@ public class feedback extends javax.swing.JFrame {
         jLabel2.setText("HOW ARE YOUR EXPERIENCE WITH APPLICATION");
 
         experience.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        experience.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BAD", "NORMAL", "GOOD", "EXCELLENT", " " }));
+        experience.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "EXCELLENT", "GOOD", "NORMAL", "BAD", " ", " ", " ", " " }));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel3.setText("IT IS HEILPFULLY FOR YOUR WORK:");
@@ -73,7 +73,7 @@ public class feedback extends javax.swing.JFrame {
         jLabel5.setText("RATING:");
 
         rating.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        rating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1 STAR", "2 STAR", "3 STAR", "4 STAR", "5 STAR" }));
+        rating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "5 STAR", "4 STAR", "3 STAR", "2 STAR", "1 STAR" }));
 
         back.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         back.setText("BACK");

@@ -40,6 +40,10 @@ public class File_upload extends javax.swing.JFrame {
     //public static String uploaded_file_name;
     public static String file_path = "";
     //public String[] key1 = new String[noq];
+    public boolean checkpoint1=false;
+    public boolean checkpoint2=false;
+    public boolean checkpoint3=true;
+    public String keyword = "";
     
     
     /**
@@ -47,6 +51,7 @@ public class File_upload extends javax.swing.JFrame {
      */
     public File_upload() {
         initComponents();
+        ta.setText("PLEASE WAIT FOR FILE UPLOADING IT TAKES TIMES");
         reading_mode.setEnabled(false);
                 test_mode.setEnabled(false);
                 separator.setEnabled(false);
@@ -55,9 +60,7 @@ public class File_upload extends javax.swing.JFrame {
     
     public void separator()
     {
-            remove_hindi.setEnabled(true);
-            reading_mode.setEnabled(true);
-            test_mode.setEnabled(true);
+            
             /*int noq = 0;
             try{
             noq = Integer.parseInt(NOQ1.getText());
@@ -68,60 +71,48 @@ public class File_upload extends javax.swing.JFrame {
             //System.out.println(noq);
 
             //here we split question part from answer part by use the keyword(Answer Key)
-            String[] subs = ta.getText().split("Answer Key");
+            String ta1="Answer Key";
+             String[] subs = ta.getText().split("Answer Key");
+            //boolean val_key = Pattern.matches(".*"+ta1+".*",ta.getText());//use to find keyword this tell is is search_key id present in temp or not
+            boolean val_key = Pattern.compile(".*"+ta1+".*").matcher(ta.getText().trim()).matches();
+            if(!(subs.length==2))  //checing for Answer Key is present or not
+            {
+                JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">FILE HAVING SOME ISSUE, ANSWER SET NOT FOUND IN FILE<br>PLEASE CHECK FILE OR TRY OTHER FILE<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE); 
+            }
+            else
+            { 
+                checkpoint1=true;
+                remove_hindi.setEnabled(true);
+                reading_mode.setEnabled(true);
+                test_mode.setEnabled(true);
+               
 
-            ques_area.setText(subs[0]);
-            ans_area.setText(subs[1]);
-            
-            
-            String[] subs1 = ques_area.getText().split("Hindi");
-        String[] subs2 = ans_area.getText().split("Hindi");
-        //System.out.println("Q"+subs1[1]==null);
-        //System.out.println("A"+subs2[1]==null);
-        if(subs1.length==2)
-        {
-            System.out.println("in ques");
-            ques_area.setText(subs1[0]);
-            hindi.setText(hindi.getText()+subs1[1]);
-        }
-        else if(subs2.length==2)
-        {
-            ans_area.setText(subs2[0]);
-            hindi.setText(hindi.getText()+subs2[1]);
-        }
+                ques_area.setText(subs[0]);
+                ans_area.setText(subs[1]);
+
+                //separating hindi part
+                String[] subs1 = ques_area.getText().split("Hindi");
+                String[] subs2 = ans_area.getText().split("Hindi");
+                //System.out.println("Q"+subs1[1]==null);
+                //System.out.println("A"+subs2[1]==null);
+                if(subs1.length==2)
+                {
+                    System.out.println("in ques");
+                    ques_area.setText(subs1[0]);
+                    hindi.setText(hindi.getText()+subs1[1]);
+                }
+                else if(subs2.length==2)
+                {
+                    ans_area.setText(subs2[0]);
+                    hindi.setText(hindi.getText()+subs2[1]);
+                }
+            }
     }
     
-    public void split_file()
+    public void findkeyword(String[] answer_area2)
     {
-        try{
-        noq = Integer.parseInt(NOQ1.getText());     //typecaste from Sring to integer
-        }catch(NumberFormatException e)
-        {
-            System.out.println(e);
-        }
-        //System.out.println(noq);
-        /*String[] subs = ta.getText().split("Answer Key");
-        ques_area.setText(subs[0]);
-        ans_area.setText(subs[1]);*/
-        //String ans_area1 = ans_area.getText().replaceAll("[\r\n]+", " ");
-        String ans_area1 = ans_area.getText();
-        String[] answer_area2 = ans_area1.split("[\r\n]");        //split ans_area1 text into string array from new line  because of find the keyword
-        //String[] sample = {"Question 1","Correct Option - 2","Question 2","Correct Option - 3","Question 3","Correct Option - 1","Question 4","Correct Option - 2","Question 5","Correct Option - 3",};
-		for(int i=0;i<10;i++)
-		{
-			System.out.println("sss"+answer_area2[i]+i);
-		}
-        //String ques_area1 = ques_area.getText().replaceAll("[\r\n]+", " ");
-        String ques_area1 = ques_area.getText();
-        //String ans_area1 = " Que. 1 Correct Option - 4 Que. 2 Correct Option - 1 Que. 3 Correct Option - 2 Que. 4 Correct Option - 1 Que. 5 Correct Option - 1 Que. 6 Correct Option - 3 Que. 7 Correct Option - 3 Que. 8 Correct Option - 1 Que. 9 Correct Option - 2 Que. 10 Correct Option - 1";
-        //System.out.println("Answer key:"+ques_area1);
-        //System.out.println("Answer key:"+ans_area1);
-        key = new String[noq];                  //store question_no
-	String[] value = new String[noq];       //store correct option
-        int index = 0;
-        int index1 = 0;
-        String[] keyword_sample = {"Question\\s\\d"," Question\\s\\d","Question\\.\\s\\d","Que\\s\\d","Que\\.\\s\\d","Q\\s\\d","Q\\.\\s\\d"};
-        String keyword = "";
+        String[] keyword_sample = {"Question\\s\\d*"," Question\\s\\d*","Question\\.\\s\\d*","Que\\s\\d*","Que\\.\\s\\d*","Q\\s\\d*","Q\\.\\s\\d*","\\d*\\."};
+        
         int len = keyword_sample.length;
 	for(int i=0;i<len;i++)
 	{
@@ -140,6 +131,7 @@ public class File_upload extends javax.swing.JFrame {
             if(k_count==noq)    //check no of time search_key present in answer_area2 is equal to noq if yes then search key is our keyword
             {
                 keyword = keyword_sample[i];
+                checkpoint2=true;
                 break;
             }
             /*if(val_key)
@@ -148,93 +140,241 @@ public class File_upload extends javax.swing.JFrame {
                 break;
             }*/
 	}
-        //keyword = "Question";
-        String pat = keyword;
-        //String pat = keyword+"\\s\\d*";
-        //String pat ="Que.\\s\\d*";
-	Pattern pattern = Pattern.compile(pat);
-	Matcher matcher = pattern.matcher(ans_area1);       //find the pattern(question_no) form ans_area1
-	boolean found = false;    
-        while (matcher.find()) { 
-            key[index] = matcher.group();       //store the matches pattern(question_no)
 
-                //System.out.println("I found the text "+key[index]);    
-            found = true;   
-            index++;
-        }  
-        //System.out.println("I found the text "+key); 
-        if(!found){    
-            System.out.println("No match found.");    
-        } 
-        value = ans_area1.split(pat+"\\D*");        //find and store correct option by spliting pat and non-digit character
-	boolean found1 = false;    
-        for(String temp:value)
-	{
-            //System.out.println(temp);
-            found1 = true; 
-        }    
-        if(!found1){    
-            System.out.println("No match found.");    
-        } 
-
-            //form dictionary
-        
-        for(int i=0;i<noq;i++)
+    }
+    
+    public void split_file() throws ArrayIndexOutOfBoundsException
+    {
+        try{
+        noq = Integer.parseInt(NOQ1.getText());     //typecaste from Sring to integer
+        }catch(NumberFormatException e)
         {
-            answer_set.put(key[i],value[i+1]);          //store the answer with there question_no and correct option
+            System.out.println(e);
         }
-        //dict_key.setText("dict:"+set);
-        
-        
-        
-        //Question ka 
-        
-	//String[] value1 = new String[noq];
-        String[] key1 = new String[noq];            //store the question_no
-        Matcher matcher1 = pattern.matcher(ques_area1);
-	boolean found2 = false;    
-        while (matcher1.find()) 
-        { 
-            key1[index1] = matcher1.group();
-
-            //System.out.println("I found the text "+key[index1]);    
-            found2 = true;  
-            //System.out.println("index: "+index1);
-            index1++;
-        }    
-        if(!found2)
-        {    
-            System.out.println("No match found.");    
-        } 
-        //System.out.println("index: "+index1);
-        //System.out.println("I found the text "+key[10]);
-        String[] value1 = ques_area1.split(pat);        // find and store the question
-        boolean found4 = false;    
-        for(String temp1:value1)
-	{
-            //System.out.println(temp1);
-            found4 = true; 
-	}    
-        if(!found4)
-        {    
-            System.out.println("No match found.");    
-        } 
-
-            //form dictionary
-        
-        for(int i=0;i<noq;i++)
+        //System.out.println(noq);
+        /*String[] subs = ta.getText().split("Answer Key");
+        ques_area.setText(subs[0]);
+        ans_area.setText(subs[1]);*/
+        //String ans_area1 = ans_area.getText().replaceAll("[\r\n]+", " ");
+        try{
+            
+            //this code is for table formate answer
+        String ans_area1 = ans_area.getText();
+        String ques_area1 = ques_area.getText();
+        key = new String[noq];                  //store question_no
+	String[] value = new String[noq];      //store correct option
+        String[] ans_area11 = ans_area1.split("[\r\n]");
+        /*String ans11="";
+        for(String temp:ans_area11)
         {
-            question_set.put(key1[i],value1[i+1]);          //store the question with there correct question_no
-        }
-        //dict_key.setText(dict_key.getText()+"\ndict:"+set1);
+            hindi.setText(hindi.getText()+"\n"+temp);
+            ans11=hindi.getText()+"\n"+temp;
+        }*/
+            //hindi.setText(hindi.getText()+"\n"+temp);
         
-        
-        //hindi part
-         String[] value2 = hindi.getText().split(pat);
-         for(int i=0;i<noq;i++)
+            //String[] answer_area2 = ans11.split("[\r\n]");
+        //String[] answer_area2 = ans_area1.split("[\r\n]");        //split ans_area1 text into string array from new line  because of find the keyword
+        findkeyword(ans_area11);
+        if(!checkpoint2)
         {
-            hindi_set.put(key1[i],value2[i+1]);          //store the question with there correct question_no
+            String[] answer_area2 = ans_area1.split("\\s");        //split ans_area1 text into string array from new line  because of find the keyword
+            findkeyword(answer_area2);
         }
+        
+        //String[] sample = {"Question 1","Correct Option - 2","Question 2","Correct Option - 3","Question 3","Correct Option - 1","Question 4","Correct Option - 2","Question 5","Correct Option - 3",};
+		/*for(int i=0;i<10;i++)
+		{
+			System.out.println("sss"+answer_area2[i]+i);
+		}*/
+        //String ques_area1 = ques_area.getText().replaceAll("[\r\n]+", " ");
+        
+        //String ans_area1 = " Que. 1 Correct Option - 4 Que. 2 Correct Option - 1 Que. 3 Correct Option - 2 Que. 4 Correct Option - 1 Que. 5 Correct Option - 1 Que. 6 Correct Option - 3 Que. 7 Correct Option - 3 Que. 8 Correct Option - 1 Que. 9 Correct Option - 2 Que. 10 Correct Option - 1";
+        //System.out.println("Answer key:"+ques_area1);
+        //System.out.println("Answer key:"+ans_area1);
+               
+        
+        //findkeyword(answer_area2);
+        
+        if(!checkpoint2)
+        {
+            JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">NUMBER OF QUESTION IS NOT CORRECT<br>PLEASE CHECK FILE AND TYPE CORRECT NUMBER OF QUESTION OR TRY OTHER FILE<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE); 
+        }
+        else
+        {
+            int index = 0;
+            
+            //keyword = "Question";
+            String pat = keyword;
+            //String pat = keyword+"\\s\\d*";
+            //String pat ="Que.\\s\\d*";
+            Pattern pattern = Pattern.compile(pat);
+            Matcher matcher = pattern.matcher(ans_area1);       //find the pattern(question_no) form ans_area1
+            boolean found = false;    
+            while (matcher.find()) { 
+                key[index] = matcher.group();       //store the matches pattern(question_no)
+
+                    //System.out.println("I found the text "+key[index]);    
+                found = true;   
+                index++;
+            }
+            /*if(!(key.length==noq))
+            {
+                JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">INVALID FORMAT OF ANSWER, FILE HAVING DIFFERENT FORMAT OF ANSWER<br>PLEASE CHECK FILE<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE); 
+            }*/
+            //System.out.println("I found the text "+key); 
+            if(!found){    
+                System.out.println("No match found.");    
+            } 
+            //value = ans_area1.split(pat+"\\D*");        //find and store correct option by spliting pat and non-digit character
+            value = ans_area1.split(pat);
+            System.out.println("length of value: "+value.length);
+            String[] v1 = ans_area1.split(pat);
+            int c1=0;
+            for(String temp:value)
+            {
+                boolean c=false;
+                System.out.println("TEPM: "+temp);
+                String ans[]={"1","2","3","4","a","b","c","d","{a}","{b}","{c}","{d}"};
+                for(String temp2:ans)
+                {
+                    //c1=0;
+                    if((temp.trim()).equals(temp2))
+                    {
+                        System.out.println("option find="+temp2);
+                        c1++;
+                    }
+                    
+                }
+            }
+            System.out.println("length of c: "+c1);
+            if(!(c1==noq))
+            {
+                
+                value = ans_area1.split(pat+"\\D*");
+            }
+
+            
+            boolean found1 = false;
+            System.out.println("length of value: "+value.length);
+            for(int temp=0;temp<value.length;temp++)
+            {
+                boolean c=false;
+                //System.out.println(temp);
+                found1 = true;
+                String ans[]={"1","2","3","4","a","b","c","d","{a}","{b}","{c}","{d}"};
+                for(String temp2:ans)
+                {
+                    
+                    if((value[temp].trim()).equals(temp2))
+                    {
+                        System.out.println("correct option="+temp2);
+                        c=true;
+                        
+                    }
+                    //else
+                    //{
+                        /*String[] option;
+                        Pattern pattern1 = Pattern.compile("//d");
+                        Matcher matcher1 = pattern1.matcher(value[temp]);
+                        int i=0;
+                        while (matcher.find()) { 
+                            option[i] = matcher.group();       //store the matches pattern(question_no)
+                             System.out.println(option[i]);
+                                //System.out.println("I found the text "+key[index]);    
+                            found = true;   
+                            i++;
+                        }*/
+                       //JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">ANSWER PART OF QUESTION NUMBER"+temp+", HAVING SOME PROBLEM<br>PLEASE CHECK ANSWER PART OF QUESION NUMBER"+temp+"<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE); 
+                    //}
+                    
+                }
+                if(temp==0)
+                    c=true;
+                if(!c)
+                {
+                    checkpoint3=false;
+                    JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">ANSWER PART OF QUESTION NUMBER"+(temp)+", HAVING SOME PROBLEM<br>PLEASE CHECK ANSWER PART OF QUESION NUMBER <br>IF EXTRA CHARACTER IS THERE REMOVE IT AND TRY AGAIN"+(temp)+"<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE); 
+                }
+            }
+            if(checkpoint3)
+            {
+                System.out.println("in checkpoint 3");
+                int index1 = 0;
+                if(!found1){    
+                    System.out.println("No match found.");    
+                } 
+
+                    //form dictionary
+                System.out.println("length of value: "+value.length);
+                for(int i=0;i<noq;i++)
+                {
+                    answer_set.put(key[i],value[i+1].trim());          //store the answer with there question_no and correct option
+                    System.out.println("andwer = "+ value[i+1]);
+                }
+                //dict_key.setText("dict:"+set);
+
+
+
+                //Question ka 
+
+                //String[] value1 = new String[noq];
+                String[] key1 = new String[noq];            //store the question_no
+                Matcher matcher1 = pattern.matcher(ques_area1);
+                boolean found2 = false;    
+                while (matcher1.find()) 
+                { 
+                    key1[index1] = matcher1.group();
+
+                    //System.out.println("I found the text "+key[index1]);    
+                    found2 = true;  
+                    //System.out.println("index: "+index1);
+                    index1++;
+                }    
+                if(!found2)
+                {    
+                    System.out.println("No match found.");    
+                } 
+                //System.out.println("index: "+index1);
+                //System.out.println("I found the text "+key[10]);
+                String[] value1 = ques_area1.split(pat);        // find and store the question
+                boolean found4 = false;    
+                for(String temp1:value1)
+                {
+                    //System.out.println(temp1);
+                    found4 = true; 
+                }    
+                if(!found4)
+                {    
+                    System.out.println("No match found.");    
+                } 
+
+                try{
+                    //form dictionary
+                    for(int i=0;i<noq;i++)
+                    {
+                        question_set.put(key1[i],value1[i+1]);          //store the question with there correct question_no
+                    }
+                }catch(Exception e)
+                {
+                    System.out.println("no");
+                }
+
+                //dict_key.setText(dict_key.getText()+"\ndict:"+set1);
+
+
+                //hindi part
+                 String[] value2 = hindi.getText().split(pat);
+                 for(int i=0;i<noq;i++)
+                {
+                    hindi_set.put(key1[i],value2[i+1]);          //store the question with there correct question_no
+                }
+            }
+        }
+        }catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        
     }
 
     /**
@@ -315,7 +455,6 @@ public class File_upload extends javax.swing.JFrame {
             }
         });
 
-        ta.setEditable(false);
         ta.setColumns(20);
         ta.setRows(5);
         jScrollPane1.setViewportView(ta);
@@ -365,7 +504,8 @@ public class File_upload extends javax.swing.JFrame {
         hindi.setRows(5);
         jScrollPane4.setViewportView(hindi);
 
-        remove_hindi.setText("REMOVE HINDI PART");
+        remove_hindi.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        remove_hindi.setText("HINDI PART");
         remove_hindi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 remove_hindiActionPerformed(evt);
@@ -393,13 +533,15 @@ public class File_upload extends javax.swing.JFrame {
                                 .addGap(120, 120, 120)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(32, 32, 32)
-                                .addComponent(ansType, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
-                                .addComponent(NOQ1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(NOQ1, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(file_chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(ansType, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -412,23 +554,20 @@ public class File_upload extends javax.swing.JFrame {
                                 .addGap(57, 57, 57)
                                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(50, 50, 50)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(reading_mode)
-                                .addGap(18, 18, 18)
-                                .addComponent(separator, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(file_chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(reading_mode)
+                        .addGap(41, 41, 41)
+                        .addComponent(separator, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(remove_hindi, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(remove_hindi, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
+                        .addGap(96, 96, 96)
                         .addComponent(jLabel5)
                         .addGap(128, 128, 128)
                         .addComponent(jLabel6)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
+                        .addGap(19, 19, 19)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -468,11 +607,9 @@ public class File_upload extends javax.swing.JFrame {
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(ansType, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(file_chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(file_chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(reading_mode, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
@@ -510,6 +647,7 @@ public class File_upload extends javax.swing.JFrame {
 
     private void reading_modeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reading_modeActionPerformed
         //String temp = ta.getText();
+        checkpoint3=true;
        if("".equals(NOQ1.getText()))
         {
             JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">PLEASE ENTER NUMBER OF QUESTION<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE);
@@ -517,9 +655,17 @@ public class File_upload extends javax.swing.JFrame {
         else
         {
             separator();
-            split_file();
-            setVisible(false);
-        new Reading_Mode().setVisible(true);
+            if(checkpoint1)
+            {
+                split_file();
+                if(checkpoint2 && checkpoint3)
+                {
+                    setVisible(false);
+                    new Reading_Mode().setVisible(true);
+                }
+                
+            }
+            
         }
         
        /* try{
@@ -559,14 +705,14 @@ public class File_upload extends javax.swing.JFrame {
                 
                 //remove_hindi.setEnabled(true);
                 //for selecting the file path
-               /* JFileChooser fc=new JFileChooser(); 
+               JFileChooser fc=new JFileChooser(); 
                 int i=fc.showOpenDialog(this); 
                 //String file_path = "";
                 //System.out.println("i= "+i);
                 if(i==JFileChooser.APPROVE_OPTION)
                 { 
                     File f=fc.getSelectedFile(); 
-                    // = File.getName();
+                    
                     file_path = f.getPath();     //get the file path
                 }
                 else if(i==JFileChooser.CANCEL_OPTION)
@@ -578,36 +724,51 @@ public class File_upload extends javax.swing.JFrame {
                 {
                     System.out.println("nothing");
                 }
-                */
+                
                 
                 //reader and write the file content
-                FileReader in = null; 
-		FileWriter out = null;
-		try {
+                boolean val_key = Pattern.compile(".*"+".txt").matcher(file_path).matches();
+                if(!val_key)
+                {
+                    JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">ONLY TEXT FILE SUPPORTED<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE);
+
+                }
+                else{
+                //FileReader in = null; 
+		//FileWriter out = null;
+		//try {
 		//in = new FileReader(file_path);        //read file content
-                in = new FileReader("D:\\ANAND\\TYCS\\project\\output.txt");        
+                //in = new FileReader("D:\\ANAND\\TYCS\\project\\steps.txt");
+                /*in = new FileReader("D:\\ANAND\\TYCS\\project\\data set\\Answer at end\\output.txt");        
 		//out = new FileWriter("D:\\ANAND\\TYCS\\project\\output.txt");
 		int c;
                 char ch;
                 String t;
-                
+                ta.setText("");
 		while ((c = in.read()) != -1)   
 		{ 
 			ch = ((char)c);         
-                        /*if(ta.getText().isEmpty())
-                        {
-                            ta.setText(ta.getText()+Character.toString(ch));
-                        }
-                        else
-                        {
-                            ta.setText("");
-                        }*/
                         ta.setText(ta.getText()+Character.toString(ch));    //write file content to ta
-		}
+		}*/
                 //ta.setText((String)ch));
+                
+                //File file = new File("D:\\\\ANAND\\\\TYCS\\\\project\\\\output.txt");
+ 
+            try (BufferedReader br = new BufferedReader(new FileReader(file_path)))
+            {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    //System.out.println(line);
+                    ta.setText(ta.getText()+"\n"+line);
+                }
 		}catch(Exception e)
                 {
+                    reading_mode.setEnabled(false);
+                    test_mode.setEnabled(false);
+                    separator.setEnabled(false);
+                    System.out.println(e);
                     JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">FILE HAVING SOME ISSUE<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE);
+                }
                 }
        
         // TODO add your handling code here:
@@ -639,6 +800,7 @@ public class File_upload extends javax.swing.JFrame {
 
     private void test_modeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_test_modeActionPerformed
         // TODO add your handling code here:
+        checkpoint3=true;
         if("".equals(NOQ1.getText()))
         {
             JOptionPane.showMessageDialog(null,"<html><h1><span style=\"color:red font:-size:10px\">PLEASE ENTER NUMBER OF QUESTION<span></h1><html>","ALERT",JOptionPane.INFORMATION_MESSAGE);
@@ -646,9 +808,17 @@ public class File_upload extends javax.swing.JFrame {
         else
         {
             separator();
-            split_file();
-            setVisible(false);
-        new Quiz_Mode().setVisible(true);
+            if(checkpoint1)
+            {
+                split_file();
+                if(checkpoint2 && checkpoint3)
+                {
+                    setVisible(false);
+                    new Quiz_Mode().setVisible(true);
+                }
+                
+            }
+            
         }
              //directing to the Quiz_mode
     }//GEN-LAST:event_test_modeActionPerformed
